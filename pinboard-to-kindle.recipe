@@ -23,7 +23,6 @@ FETCH_ARTICLE_TMP_PATH = '/tmp'
 
 ## Full file paths to Node and Pandoc binaries
 NODE_BIN_FILE_PATH = '/usr/local/bin/node'
-PANDOC_BIN_FILE_PATH = '/usr/local/bin/pandoc'
 
 import os
 import re
