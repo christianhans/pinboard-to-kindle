@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# ebook-convert pb-to-kindle.recipe test.mobi --output-profile kindle_pw3
+# ebook-convert pinboard-to-kindle.recipe test.mobi --output-profile kindle_pw3
 
 __license__ = "MIT"
 __copyright__ = "2020, Christian Hans"
@@ -41,8 +41,9 @@ class PinboardRecipe(BasicNewsRecipe):
     auto_cleanup = False
     no_stylesheets = True
     remove_javascript = True
+    articles_are_obfuscated = True
 
-    created_tmp_folders = []
+    downloaded_file_paths = {}
 
     def _get_pinboard_token(self):
         pinboard_token = os.environ.get("PINBOARD_TOKEN")
@@ -89,13 +90,8 @@ class PinboardRecipe(BasicNewsRecipe):
         urllib.urlopen("https://api.pinboard.in/v1/posts/add?" + params)
 
     def _fetch_article_moz_readability(self, url):
-        tmp_folder_path = os.path.join(FETCH_ARTICLE_TMP_PATH, '{}'.format(uuid.uuid1()))
-        downloaded_file_path = os.path.join(tmp_folder_path, 'downloaded.html')
-        extracted_file_path = os.path.join(tmp_folder_path, 'extracted.html')
-        media_file_path = os.path.join(tmp_folder_path, 'media')
-
-        os.mkdir(tmp_folder_path)
-        self.created_tmp_folders.append(tmp_folder_path)
+        downloaded_file_path = os.path.join(FETCH_ARTICLE_TMP_PATH, "{}.html".format(uuid.uuid1()))
+        self.downloaded_file_paths[url] = downloaded_file_path
 
         print("Downloading: {}".format(url))
         subprocess.call([
@@ -105,16 +101,7 @@ class PinboardRecipe(BasicNewsRecipe):
             "--output_file={}".format(downloaded_file_path)
         ])
 
-        print("Extracting media: {}".format(downloaded_file_path))
-        subprocess.call([
-            PANDOC_BIN_FILE_PATH,
-            "--extract-media={}".format(media_file_path),
-            downloaded_file_path,
-            "-o",
-            extracted_file_path
-        ])
-
-        return extracted_file_path
+        return downloaded_file_path
 
     def _get_article_metadata(self, article_file_path):
         res = {}
@@ -136,16 +123,21 @@ class PinboardRecipe(BasicNewsRecipe):
             res["metadata"] = match.group(1)
         return res
 
+    def get_obfuscated_article(self, url):
+        """ Let Calibre download images and other media in downloaded html files """
+        return self.downloaded_file_paths.get(url)
+
     def parse_index(self):
         articles = []
 
         bookmarks = self._get_bookmarks()
         for bookmark in bookmarks:
+            url = bookmark['href']
             try:
-                article_file_path = self._fetch_article_moz_readability(bookmark['href'])
+                article_file_path = self._fetch_article_moz_readability(url)
                 article_info = self._get_article_metadata(article_file_path)
             except:
-                print("Error fetching URL: {}".format(bookmark['href']))
+                print("Error fetching URL: {}".format(url))
                 continue
 
             # TODO: Enable, also make configurable
@@ -153,7 +145,7 @@ class PinboardRecipe(BasicNewsRecipe):
 
             articles.append({
                 "title": article_info.get('title', ''),
-                "url": "file://{}".format(article_file_path),
+                "url": url,
                 "description": article_info.get('metadata', ''),
                 # "date": "February 20th, 2020",        
             })
@@ -161,5 +153,6 @@ class PinboardRecipe(BasicNewsRecipe):
         return [("Pinboard", articles)]
 
     def cleanup(self):
-        for folder in self.created_tmp_folders:
-            shutil.rmtree(folder)
+        for file_path in self.downloaded_file_paths.values():
+            print("Removing temporary file: {}".format(file_path))
+            os.remove(file_path)
