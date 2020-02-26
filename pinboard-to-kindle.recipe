@@ -1,0 +1,165 @@
+#!/usr/bin/env python
+
+# ebook-convert pb-to-kindle.recipe test.mobi --output-profile kindle_pw3
+
+__license__ = "MIT"
+__copyright__ = "2020, Christian Hans"
+__website__ = ""
+
+#
+# Config
+#
+## Maximum number of unread Pinboard bookmarks to download
+MAX_ARTICLES = 2 #50
+
+## If set, the recipe will only consider unread Pinboard bookmarks that have this tag
+TOKINDLE_TAG = "tokindle"
+
+## Full file path to pinboard-to-kindle/fetch-article-moz-readability/index.js
+FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ''
+
+## Temporary folder to use for downloading bookmark's page content
+FETCH_ARTICLE_TMP_PATH = '/tmp'
+
+## Full file paths to Node and Pandoc binaries
+NODE_BIN_FILE_PATH = '/usr/local/bin/node'
+PANDOC_BIN_FILE_PATH = '/usr/local/bin/pandoc'
+
+import os
+import re
+import urllib
+import json
+import subprocess
+import uuid
+import shutil
+
+class PinboardRecipe(BasicNewsRecipe):
+    title = "Pinboard"
+    description = "Generate an ebook of unread Pinboard bookmarks."
+    __author__ = "Christian Hans"
+
+    auto_cleanup = False
+    no_stylesheets = True
+    remove_javascript = True
+
+    created_tmp_folders = []
+
+    def _get_pinboard_token(self):
+        pinboard_token = os.environ.get("PINBOARD_TOKEN")
+        if not pinboard_token:
+            self.abort_recipe_processing(
+                "Please set PINBOARD_TOKEN environment variable."
+            )
+        return pinboard_token
+
+    def _get_bookmarks(self):
+        params = urllib.urlencode(
+            {
+                "toread": "yes",
+                "tags": TOKINDLE_TAG,
+                "format": "json",
+                "auth_token": self._get_pinboard_token(),
+            }
+        )
+        response = urllib.urlopen("https://api.pinboard.in/v1/posts/all?" + params)
+        bookmarks = json.loads(response.read())
+        if len(bookmarks) == 0:
+            self.abort_recipe_processing("No unread Pinboard bookmarks.")
+        return bookmarks[:MAX_ARTICLES]
+
+    def _remove_tokindle_tag(self, bookmark):
+        # Remove tokindle tag and update bookmark in pinboard
+        tags = bookmark["tags"].split()
+        if TOKINDLE_TAG in tags:
+            tags.remove(TOKINDLE_TAG)
+        params = urllib.urlencode(
+            {
+                "url": bookmark["href"],
+                "description": bookmark["description"],
+                "extended": bookmark["extended"],
+                "tags": " ".join(tags),
+                "dt": bookmark["time"],
+                "shared": bookmark["shared"],
+                "toread": bookmark["toread"],
+                "replace": "yes",
+                "format": "json",
+                "auth_token": self._get_pinboard_token(),
+            }
+        )
+        urllib.urlopen("https://api.pinboard.in/v1/posts/add?" + params)
+
+    def _fetch_article_moz_readability(self, url):
+        tmp_folder_path = os.path.join(FETCH_ARTICLE_TMP_PATH, '{}'.format(uuid.uuid1()))
+        downloaded_file_path = os.path.join(tmp_folder_path, 'downloaded.html')
+        extracted_file_path = os.path.join(tmp_folder_path, 'extracted.html')
+        media_file_path = os.path.join(tmp_folder_path, 'media')
+
+        os.mkdir(tmp_folder_path)
+        self.created_tmp_folders.append(tmp_folder_path)
+
+        print("Downloading: {}".format(url))
+        subprocess.call([
+            NODE_BIN_FILE_PATH,
+            FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH,
+            url,
+            "--output_file={}".format(downloaded_file_path)
+        ])
+
+        print("Extracting media: {}".format(downloaded_file_path))
+        subprocess.call([
+            PANDOC_BIN_FILE_PATH,
+            "--extract-media={}".format(media_file_path),
+            downloaded_file_path,
+            "-o",
+            extracted_file_path
+        ])
+
+        return extracted_file_path
+
+    def _get_article_metadata(self, article_file_path):
+        res = {}
+        with open(article_file_path, "r") as f:
+            html = f.read()
+        match = re.search(
+            '<[^>]+ id="pb-to-kindle-article-title">(.*?)</[^>]+>',
+            html,
+            re.IGNORECASE
+        )
+        if match:
+            res["title"] = match.group(1)
+        match = re.search(
+            '<[^>]+ id="pb-to-kindle-article-metadata">(.*?)</[^>]+>',
+            html,
+            re.IGNORECASE
+        )
+        if match:
+            res["metadata"] = match.group(1)
+        return res
+
+    def parse_index(self):
+        articles = []
+
+        bookmarks = self._get_bookmarks()
+        for bookmark in bookmarks:
+            try:
+                article_file_path = self._fetch_article_moz_readability(bookmark['href'])
+                article_info = self._get_article_metadata(article_file_path)
+            except:
+                print("Error fetching URL: {}".format(bookmark['href']))
+                continue
+
+            # TODO: Enable, also make configurable
+            # self._remove_tokindle_tag(bookmark)
+
+            articles.append({
+                "title": article_info.get('title', ''),
+                "url": "file://{}".format(article_file_path),
+                "description": article_info.get('metadata', ''),
+                # "date": "February 20th, 2020",        
+            })
+
+        return [("Pinboard", articles)]
+
+    def cleanup(self):
+        for folder in self.created_tmp_folders:
+            shutil.rmtree(folder)
