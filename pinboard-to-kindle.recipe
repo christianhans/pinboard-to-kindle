@@ -31,7 +31,6 @@ import urllib
 import json
 import subprocess
 import uuid
-import shutil
 
 class PinboardRecipe(BasicNewsRecipe):
     title = "Pinboard"
