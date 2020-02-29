@@ -16,6 +16,10 @@ MAX_ARTICLES = 50
 ## If set, the recipe will only consider unread Pinboard bookmarks that have this tag
 TOKINDLE_TAG = "tokindle"
 
+## If set, the recipe will update all fetched Pinboard bookmarks and
+## replace TOKINDLE_TAG with this tag
+REPLACE_TOKINDLE_TAG = "sentkindle"
+
 ## Full file path to pinboard-to-kindle/fetch-article-moz-readability/index.js
 FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ''
 
@@ -56,25 +60,26 @@ class PinboardRecipe(BasicNewsRecipe):
     def _get_bookmarks(self):
         params = urllib.urlencode(
             {
-                "toread": "yes",
+                "tag": TOKINDLE_TAG if TOKINDLE_TAG else "",
                 "format": "json",
                 "auth_token": self._get_pinboard_token(),
             }
         )
         response = urllib.urlopen("https://api.pinboard.in/v1/posts/all?" + params)
         bookmarks = json.loads(response.read())
-        if TOKINDLE_TAG:
-            bookmarks = [b for b in bookmarks if (TOKINDLE_TAG in b["tags"].split())]
+        bookmarks = [b for b in bookmarks if (b["toread"] == "yes")]
         bookmarks = bookmarks[:MAX_ARTICLES]
         if len(bookmarks) == 0:
             self.abort_recipe_processing("No unread Pinboard bookmarks.")
         return bookmarks
 
-    def _remove_tokindle_tag(self, bookmark):
-        # Remove tokindle tag and update bookmark in pinboard
+    def _replace_tokindle_tag(self, bookmark):
+        if (not TOKINDLE_TAG) or (not REPLACE_TOKINDLE_TAG):
+            return
         tags = bookmark["tags"].split()
         if TOKINDLE_TAG in tags:
             tags.remove(TOKINDLE_TAG)
+        tags.append(REPLACE_TOKINDLE_TAG)
         params = urllib.urlencode(
             {
                 "url": bookmark["href"],
@@ -142,8 +147,8 @@ class PinboardRecipe(BasicNewsRecipe):
                 print("Error fetching URL: {}".format(url))
                 continue
 
-            # TODO: Enable, also make configurable
-            # self._remove_tokindle_tag(bookmark)
+            print("Updating Pinboard tags: {}".format(url))
+            self._replace_tokindle_tag(bookmark)
 
             articles.append({
                 "title": article_info.get('title', ''),
