@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# ebook-convert pinboard-to-kindle.recipe test.mobi --output-profile kindle_pw3
+# To test this recipe run:
+# source ~/.pinboard.conf && ebook-convert pinboard-to-kindle.recipe test.mobi --output-profile kindle_pw3 --debug
 
 __license__ = "MIT"
 __copyright__ = "2020, Christian Hans"
@@ -10,7 +11,7 @@ __website__ = ""
 # Config
 #
 ## Maximum number of unread Pinboard bookmarks to download
-MAX_ARTICLES = 2 #50
+MAX_ARTICLES = 50
 
 ## If set, the recipe will only consider unread Pinboard bookmarks that have this tag
 TOKINDLE_TAG = "tokindle"
@@ -41,6 +42,7 @@ class PinboardRecipe(BasicNewsRecipe):
     no_stylesheets = True
     remove_javascript = True
     articles_are_obfuscated = True
+    encoding = "utf8"
 
     downloaded_file_paths = {}
 
@@ -56,16 +58,18 @@ class PinboardRecipe(BasicNewsRecipe):
         params = urllib.urlencode(
             {
                 "toread": "yes",
-                "tags": TOKINDLE_TAG,
                 "format": "json",
                 "auth_token": self._get_pinboard_token(),
             }
         )
         response = urllib.urlopen("https://api.pinboard.in/v1/posts/all?" + params)
         bookmarks = json.loads(response.read())
+        if TOKINDLE_TAG:
+            bookmarks = [b for b in bookmarks if (TOKINDLE_TAG in b["tags"].split())]
+        bookmarks = bookmarks[:MAX_ARTICLES]
         if len(bookmarks) == 0:
             self.abort_recipe_processing("No unread Pinboard bookmarks.")
-        return bookmarks[:MAX_ARTICLES]
+        return bookmarks
 
     def _remove_tokindle_tag(self, bookmark):
         # Remove tokindle tag and update bookmark in pinboard
