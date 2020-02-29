@@ -1,7 +1,23 @@
 const fs = require('fs');
 const readability = require('readability-nodejs');
 const JSDOM = require('jsdom').JSDOM;
+const urlparse = require('url').parse;
 const argv = require('minimist')(process.argv.slice(2));
+
+// Don't use Readability for these domains. Will use full page HTML instead.
+const READABILITY_DOMAIN_BLACKLIST = [
+    'newyorker.com'
+]
+
+function use_readability(url) {
+    let hostname = urlparse(url).hostname.toLowerCase();
+    for (const domain of READABILITY_DOMAIN_BLACKLIST) {
+        if (hostname.endsWith(domain.toLowerCase())) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function countWords(str) {
 	return str.trim().split(/\s+/).length;
@@ -14,7 +30,11 @@ function fetch_article(url, callback) {
         // Parse article
         let reader = new readability.Readability(dom.window.document);
         let article = reader.parse();
-    
+        let articleHtml = dom.window.document.documentElement.outerHTML;
+        if (use_readability(url)) {
+            articleHtml = article.content;
+        }
+
         // Meta data (sub title, site name, word count)
         let meta = [];
         if (article.byline) {
@@ -36,7 +56,7 @@ function fetch_article(url, callback) {
         res.push('<p><i id="pb-to-kindle-article-metadata">' + meta.join(' • ') + '</i></p>');
         res.push('<p><i id="pb-to-kindle-article-links">' + links.join(' • ') + '</i></p>');
         res.push('<hr>');
-        res.push(article.content);
+        res.push(articleHtml);
         res.push('<hr>');
         res.push('<p><i>' + links.join(' • ') + '</i></p>');
 
