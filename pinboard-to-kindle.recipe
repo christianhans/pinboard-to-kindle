@@ -157,5 +157,7 @@ class PinboardRecipe(BasicNewsRecipe):
 
     def cleanup(self):
         for file_path in self.downloaded_file_paths.values():
+            if not os.path.exists(file_path):
+                continue
             print("Removing temporary file: {}".format(file_path))
             os.remove(file_path)
