@@ -6,27 +6,40 @@ const JSDOM = require('jsdom').JSDOM;
 const URL = require('url').URL;
 const argv = require('minimist')(process.argv.slice(2));
 
+// Don't use Firefox for these domains. Will use JSDOM to fetch page source instead.
+const FIREFOX_DOMAIN_BLACKLIST = [
+    'spiegel.de'
+]
+
 // Don't use Readability for these domains. Will use full page HTML instead.
 const READABILITY_DOMAIN_BLACKLIST = [
     'newyorker.com'
 ]
 
-function use_readability(url) {
+function url_in_blacklist(url, blacklist) {
     let parsed_url = new URL(url);
     let hostname = parsed_url.hostname.toLowerCase();
-    for (const domain of READABILITY_DOMAIN_BLACKLIST) {
-        if (hostname.endsWith(domain.toLowerCase())) {
-            return false;
+    for (const blacklisted_domain of blacklist) {
+        if (hostname.endsWith(blacklisted_domain.toLowerCase())) {
+            return true;
         }
     }
-    return true;
+    return false;
+}
+
+function use_firefox(url) {
+    return !url_in_blacklist(url, FIREFOX_DOMAIN_BLACKLIST);
+}
+
+function use_readability(url) {
+    return !url_in_blacklist(url, READABILITY_DOMAIN_BLACKLIST);
 }
 
 function countWords(str) {
 	return str.trim().split(/\s+/).length;
 }
 
-async function fetch_page_source(url, callback) {
+async function fetch_page_source_firefox(url, callback) {
     var options = new firefox.Options();
     options.addArguments("-headless");
     const driver = await new Builder()
@@ -43,7 +56,17 @@ async function fetch_page_source(url, callback) {
     }
 }
 
-function make_readable(url, callback) {
+async function fetch_page_source_jsdom(url, callback) {
+    JSDOM.fromURL(url).then(dom => {
+        callback(dom.window.document.documentElement.outerHTML);
+    });
+}
+
+async function make_readable(url, callback) {
+    let fetch_page_source = fetch_page_source_jsdom;
+    if (use_firefox(url)) {
+        fetch_page_source = fetch_page_source_firefox;
+    }
     fetch_page_source(url, page_source => {
         let res = [];
 
@@ -69,7 +92,7 @@ function make_readable(url, callback) {
         }
         meta.push(countWords(article.textContent) + ' words');	
         
-        // Article and mark as read links
+        // Article links
         let links = [];
         links.push('<a id="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
     
