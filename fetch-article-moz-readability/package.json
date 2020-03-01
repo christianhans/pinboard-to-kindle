@@ -12,6 +12,7 @@
   "dependencies": {
     "jsdom": "^16.2.0",
     "minimist": "^1.2.0",
-    "readability-nodejs": "0.0.2"
+    "readability-nodejs": "0.0.2",
+    "selenium-webdriver": "^4.0.0-alpha.5"
   }
 }
