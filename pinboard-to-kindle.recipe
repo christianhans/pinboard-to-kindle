@@ -79,7 +79,8 @@ class PinboardRecipe(BasicNewsRecipe):
         tags = bookmark["tags"].split()
         if TOKINDLE_TAG in tags:
             tags.remove(TOKINDLE_TAG)
-        tags.append(REPLACE_TOKINDLE_TAG)
+        if not REPLACE_TOKINDLE_TAG in tags:
+            tags.append(REPLACE_TOKINDLE_TAG)
         params = urllib.urlencode(
             {
                 "url": bookmark["href"],
