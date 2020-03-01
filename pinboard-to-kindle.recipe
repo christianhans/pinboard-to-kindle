@@ -10,7 +10,7 @@ __website__ = ""
 #
 # Config
 #
-## Maximum number of unread Pinboard bookmarks to download
+## Maximum number of unread Pinboard bookmarks to fetch
 MAX_ARTICLES = 50
 
 ## If set, the recipe will only consider unread Pinboard bookmarks that have this tag
