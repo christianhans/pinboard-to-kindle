@@ -12,7 +12,7 @@ const READABILITY_DOMAIN_BLACKLIST = [
 ]
 
 function use_readability(url) {
-    var parsed_url = new URL(url);
+    let parsed_url = new URL(url);
     let hostname = parsed_url.hostname.toLowerCase();
     for (const domain of READABILITY_DOMAIN_BLACKLIST) {
         if (hostname.endsWith(domain.toLowerCase())) {
@@ -57,7 +57,7 @@ function make_readable(url, callback) {
         }
 
         // Base path for images and other media
-        var parsed_url = new URL(url);
+        let parsed_url = new URL(url);
         res.push('<base href="' + parsed_url.origin + '" />')
 
         // Meta data (sub title, site name, word count)
