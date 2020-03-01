@@ -57,8 +57,7 @@ function make_readable(url, callback) {
         }
 
         // Base path for images and other media
-        let parsed_url = new URL(url);
-        res.push('<base href="' + parsed_url.origin + '" />')
+        res.push('<base href="' + url + '" />')
 
         // Meta data (sub title, site name, word count)
         let meta = [];
