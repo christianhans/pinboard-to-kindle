@@ -76,6 +76,7 @@ class PinboardRecipe(BasicNewsRecipe):
     def _mark_bookmark_as_sent(self, bookmark):
         if (not KINDLE_TO_TAG) or (not KINDLE_SENT_TAG):
             return
+        print("Updating Pinboard tags: {}".format(bookmark["href"]))
         tags = bookmark["tags"].split()
         if KINDLE_TO_TAG in tags:
             tags.remove(KINDLE_TO_TAG)
@@ -148,7 +149,6 @@ class PinboardRecipe(BasicNewsRecipe):
                 print("Error fetching URL: {}".format(url))
                 continue
 
-            print("Updating Pinboard tags: {}".format(url))
             self._mark_bookmark_as_sent(bookmark)
 
             articles.append({
