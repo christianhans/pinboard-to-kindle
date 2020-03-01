@@ -14,11 +14,11 @@ __website__ = ""
 MAX_ARTICLES = 50
 
 ## If set, the recipe will only consider unread Pinboard bookmarks that have this tag
-TOKINDLE_TAG = "tokindle"
+KINDLE_TO_TAG = "kindle-to"
 
 ## If set, the recipe will update all fetched Pinboard bookmarks and
-## replace TOKINDLE_TAG with this tag
-REPLACE_TOKINDLE_TAG = "sentkindle"
+## replace KINDLE_TO_TAG with this tag
+KINDLE_SENT_TAG = "kindle-sent"
 
 ## Full file path to pinboard-to-kindle/fetch-article-moz-readability/index.js
 FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ''
@@ -60,7 +60,7 @@ class PinboardRecipe(BasicNewsRecipe):
     def _get_bookmarks(self):
         params = urllib.urlencode(
             {
-                "tag": TOKINDLE_TAG if TOKINDLE_TAG else "",
+                "tag": KINDLE_TO_TAG if KINDLE_TO_TAG else "",
                 "format": "json",
                 "auth_token": self._get_pinboard_token(),
             }
@@ -73,14 +73,14 @@ class PinboardRecipe(BasicNewsRecipe):
             self.abort_recipe_processing("No unread Pinboard bookmarks.")
         return bookmarks
 
-    def _replace_tokindle_tag(self, bookmark):
-        if (not TOKINDLE_TAG) or (not REPLACE_TOKINDLE_TAG):
+    def _mark_bookmark_as_sent(self, bookmark):
+        if (not KINDLE_TO_TAG) or (not KINDLE_SENT_TAG):
             return
         tags = bookmark["tags"].split()
-        if TOKINDLE_TAG in tags:
-            tags.remove(TOKINDLE_TAG)
-        if not REPLACE_TOKINDLE_TAG in tags:
-            tags.append(REPLACE_TOKINDLE_TAG)
+        if KINDLE_TO_TAG in tags:
+            tags.remove(KINDLE_TO_TAG)
+        if not KINDLE_SENT_TAG in tags:
+            tags.append(KINDLE_SENT_TAG)
         params = urllib.urlencode(
             {
                 "url": bookmark["href"],
@@ -149,7 +149,7 @@ class PinboardRecipe(BasicNewsRecipe):
                 continue
 
             print("Updating Pinboard tags: {}".format(url))
-            self._replace_tokindle_tag(bookmark)
+            self._mark_bookmark_as_sent(bookmark)
 
             articles.append({
                 "title": article_info.get('title', ''),
@@ -165,4 +165,4 @@ class PinboardRecipe(BasicNewsRecipe):
             if not os.path.exists(file_path):
                 continue
             print("Removing temporary file: {}".format(file_path))
-            os.remove(file_path)
+            os.remove(file_path)    
