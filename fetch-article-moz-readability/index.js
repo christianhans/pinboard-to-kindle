@@ -1,7 +1,9 @@
-const fs = require('fs');
+const { writeFile } = require('fs');
+const { Builder } = require('selenium-webdriver');
+const firefox = require('selenium-webdriver/firefox');
 const readability = require('readability-nodejs');
 const JSDOM = require('jsdom').JSDOM;
-const urlparse = require('url').parse;
+const URL = require('url').URL;
 const argv = require('minimist')(process.argv.slice(2));
 
 // Don't use Readability for these domains. Will use full page HTML instead.
@@ -10,7 +12,8 @@ const READABILITY_DOMAIN_BLACKLIST = [
 ]
 
 function use_readability(url) {
-    let hostname = urlparse(url).hostname.toLowerCase();
+    var parsed_url = new URL(url);
+    let hostname = parsed_url.hostname.toLowerCase();
     for (const domain of READABILITY_DOMAIN_BLACKLIST) {
         if (hostname.endsWith(domain.toLowerCase())) {
             return false;
@@ -23,17 +26,39 @@ function countWords(str) {
 	return str.trim().split(/\s+/).length;
 }
 
-function fetch_article(url, callback) {
-    JSDOM.fromURL(url).then(dom => {
+async function fetch_page_source(url, callback) {
+    var options = new firefox.Options();
+    options.addArguments("-headless");
+    const driver = await new Builder()
+        .forBrowser('firefox')
+        .setFirefoxOptions(options)
+        .build();
+    try {
+        await driver.get(url);
+        await driver.sleep(5000);
+        const page_source = await driver.getPageSource();
+        return callback(page_source);
+    } finally {
+        await driver.quit();
+    }
+}
+
+function make_readable(url, callback) {
+    fetch_page_source(url, page_source => {
         let res = [];
 
         // Parse article
+        const dom = new JSDOM(page_source);
         let reader = new readability.Readability(dom.window.document);
         let article = reader.parse();
-        let articleHtml = dom.window.document.documentElement.outerHTML;
+        let articleHtml = page_source;
         if (use_readability(url)) {
             articleHtml = article.content;
         }
+
+        // Base path for images and other media
+        var parsed_url = new URL(url);
+        res.push('<base href="' + parsed_url.origin + '" />')
 
         // Meta data (sub title, site name, word count)
         let meta = [];
@@ -45,7 +70,7 @@ function fetch_article(url, callback) {
         }
         meta.push(countWords(article.textContent) + ' words');	
         
-        // Article links
+        // Article and mark as read links
         let links = [];
         links.push('<a id="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
     
@@ -60,7 +85,7 @@ function fetch_article(url, callback) {
         res.push('<hr>');
         res.push('<p><i>' + links.join(' • ') + '</i></p>');
 
-        return callback(res);
+        return callback(res); 
     });
 }
 
@@ -77,8 +102,8 @@ function validate_args(argv) {
 
 /* Main */
 validate_args(argv);
-fetch_article(argv._[0], res => {
-    fs.writeFile(argv.output_file, res.join('\n'), (err) => {
+make_readable(argv._[0], res => {
+    writeFile(argv.output_file, res.join('\n'), (err) => {
         if (err) {
             console.error('Error: Could not save to output file.');
             console.error(err);
