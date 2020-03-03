@@ -26,8 +26,8 @@ FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ''
 ## Temporary folder to use for downloading bookmark's page content
 FETCH_ARTICLE_TMP_PATH = '/tmp'
 
-## Full file paths to Node and Pandoc binaries
-NODE_BIN_FILE_PATH = '/usr/local/bin/node'
+## Node binary to use
+NODE_BIN = 'node'
 
 import os
 import re
@@ -104,7 +104,7 @@ class PinboardRecipe(BasicNewsRecipe):
 
         print("Downloading: {}".format(url))
         subprocess.call([
-            NODE_BIN_FILE_PATH,
+            NODE_BIN,
             FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH,
             url,
             "--output_file={}".format(downloaded_file_path)
