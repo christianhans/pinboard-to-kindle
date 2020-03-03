@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 # To test this recipe run:
-# source ~/.pinboard.conf && ebook-convert pinboard-to-kindle.recipe test.mobi --output-profile kindle_pw3 --debug
+# echo "PINBOARD_TOKEN=..." > config.env
+# eval $(egrep -v '^#' config.env | xargs) ebook-convert pinboard-to-kindle.recipe test.mobi --output-profile kindle_pw3 --verbose
 
 __license__ = "MIT"
 __copyright__ = "2020, Christian Hans"
