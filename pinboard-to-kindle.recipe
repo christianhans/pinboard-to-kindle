@@ -21,13 +21,13 @@ KINDLE_TO_TAG = "kindle-to"
 KINDLE_SENT_TAG = "kindle-sent"
 
 ## Full file path to pinboard-to-kindle/fetch-article-moz-readability/index.js
-FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ''
+FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ""
 
 ## Temporary folder to use for downloading bookmark's page content
-FETCH_ARTICLE_TMP_PATH = '/tmp'
+FETCH_ARTICLE_TMP_PATH = "/tmp"
 
 ## Node binary to use
-NODE_BIN = 'node'
+NODE_BIN = "node"
 
 import os
 import re
@@ -35,6 +35,7 @@ import urllib
 import json
 import subprocess
 import uuid
+
 
 class PinboardRecipe(BasicNewsRecipe):
     title = "Pinboard"
@@ -99,16 +100,20 @@ class PinboardRecipe(BasicNewsRecipe):
         urllib.urlopen("https://api.pinboard.in/v1/posts/add?" + params)
 
     def _fetch_article_moz_readability(self, url):
-        downloaded_file_path = os.path.join(FETCH_ARTICLE_TMP_PATH, "{}.html".format(uuid.uuid1()))
+        downloaded_file_path = os.path.join(
+            FETCH_ARTICLE_TMP_PATH, "{}.html".format(uuid.uuid1())
+        )
         self.downloaded_file_paths[url] = downloaded_file_path
 
         print("Downloading: {}".format(url))
-        subprocess.call([
-            NODE_BIN,
-            FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH,
-            url,
-            "--output_file={}".format(downloaded_file_path)
-        ])
+        subprocess.call(
+            [
+                NODE_BIN,
+                FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH,
+                url,
+                "--output_file={}".format(downloaded_file_path),
+            ]
+        )
 
         return downloaded_file_path
 
@@ -117,16 +122,14 @@ class PinboardRecipe(BasicNewsRecipe):
         with open(article_file_path, "r") as f:
             html = f.read()
         match = re.search(
-            '<[^>]+ id="pb-to-kindle-article-title">(.*?)</[^>]+>',
-            html,
-            re.IGNORECASE
+            '<[^>]+ id="pb-to-kindle-article-title">(.*?)</[^>]+>', html, re.IGNORECASE
         )
         if match:
             res["title"] = match.group(1)
         match = re.search(
             '<[^>]+ id="pb-to-kindle-article-metadata">(.*?)</[^>]+>',
             html,
-            re.IGNORECASE
+            re.IGNORECASE,
         )
         if match:
             res["metadata"] = match.group(1)
@@ -141,7 +144,7 @@ class PinboardRecipe(BasicNewsRecipe):
 
         bookmarks = self._get_bookmarks()
         for bookmark in bookmarks:
-            url = bookmark['href']
+            url = bookmark["href"]
             try:
                 article_file_path = self._fetch_article_moz_readability(url)
                 article_info = self._get_article_metadata(article_file_path)
@@ -151,12 +154,14 @@ class PinboardRecipe(BasicNewsRecipe):
 
             self._mark_bookmark_as_sent(bookmark)
 
-            articles.append({
-                "title": article_info.get('title', ''),
-                "url": url,
-                "description": article_info.get('metadata', ''),
-                # "date": "February 20th, 2020",        
-            })
+            articles.append(
+                {
+                    "title": article_info.get("title", ""),
+                    "url": url,
+                    "description": article_info.get("metadata", ""),
+                    # "date": "February 20th, 2020",
+                }
+            )
 
         return [("Pinboard", articles)]
 
@@ -165,4 +170,5 @@ class PinboardRecipe(BasicNewsRecipe):
             if not os.path.exists(file_path):
                 continue
             print("Removing temporary file: {}".format(file_path))
-            os.remove(file_path)    
+            os.remove(file_path)
+
