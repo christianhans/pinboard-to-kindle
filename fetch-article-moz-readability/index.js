@@ -95,7 +95,11 @@ async function make_readable(url, callback) {
         // Article links
         let links = [];
         links.push('<a id="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
-    
+        if (process.env.PINBOARD_MARK_READ_URL && process.env.PINBOARD_MARK_READ_SECRET) {
+            let href = process.env.PINBOARD_MARK_READ_URL + '?s=' + process.env.PINBOARD_MARK_READ_SECRET + '&url=' + url;
+            links.push('<a id="pb-to-kindle-article-mark-as-read-link" href="' + href + '">Mark as read</a>');
+        }
+
         // Output
         if (article.title) {
             res.push('<h2 id="pb-to-kindle-article-title">' + article.title + '</h2>');
