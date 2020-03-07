@@ -6,7 +6,7 @@
 
 __license__ = "MIT"
 __copyright__ = "2020, Christian Hans"
-__website__ = ""
+__website__ = "https://github.com/christianhans/pinboard-to-kindle"
 
 #
 # Config
