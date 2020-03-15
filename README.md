@@ -36,13 +36,13 @@ cd pinboard-to-kindle
 Set `FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH` so it points to the full file path of `fetch-article-moz-readability/index.js`. For example:
 
 ```
-echo 'FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH="/home/pi/pinboard-to-kindle/fetch-article-moz-readability/index.js"' > config.env
+echo 'FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH="/home/pi/pinboard-to-kindle/fetch-article-moz-readability/index.js"' >> config.env
 ```
 
 Set your Pinboard API token. Copy your token from [this page](https://pinboard.in/settings/password) and replace `username:A3F...HG78` below with your actual token:
 
 ```
-echo 'PINBOARD_TOKEN="username:A3F...HG78"' > config.env
+echo 'PINBOARD_TOKEN="username:A3F...HG78"' >> config.env
 ```
 
 ## Usage
