@@ -1,8 +1,16 @@
-# pinboard-to-kindle
+<p align="center"><img src="" width="200px" /></p>
 
-![Raspberry Pi and Kindle](https://i.imgur.com/4ZxMhrt.jpg)
+<p align="center">
+  <a href="https://github.com/christianhans/pinboard-to-kindle">
+    <img src="https://i.imgur.com/4ZxMhrt.jpg" alt="Raspberry Pi and Kindle" width="300">
+  </a>
 
-Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
+  <h3 align="center">Pinboard to Kindle</h3>
+
+  <p align="center">
+    Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
+  </p>
+</p>
 
 ## Table of Contents
 
