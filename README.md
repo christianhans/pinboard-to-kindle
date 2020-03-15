@@ -6,7 +6,10 @@ Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
 
 ## Overview
 
-  * Leverages a headless Firefox instance and Mozilla's [readability](https://github.com/mozilla/readability) library to fetch clutter- and ad-free article pages. This results in eBooks with articles that look similar to Firefox's Reader View. Pages with dynamic content (e.g. a page that loads images or text via JavaScript) are fetched correctly as well.
+  * Leverages a headless Firefox instance and Mozilla's [readability](https://github.com/mozilla/readability) library to fetch clutter- and ad-free article pages.
+    + This results in eBooks with articles that look similar to Firefox's Reader View.
+    + Pages with dynamic content (e.g. a page that loads images or text via JavaScript) can be fetched correctly.
+    + Most images embedded in articles are fetched as well and will be part of the generated eBook.
   * Fetches only unread Pinboard bookmarks that have the tag `kindle-to` (per default up to 50 bookmarks).
   * When a Pinboard bookmark was successfully fetched, the tag `kindle-to` is replaced with the `kindle-sent` tag
   * The tags `kindle-to`, `kindle-sent` and number of maximum bookmarks to fetch can be configured in `pinboard-to-kindle.recipe`.
