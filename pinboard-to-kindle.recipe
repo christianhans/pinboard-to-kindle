@@ -103,7 +103,7 @@ class PinboardRecipe(BasicNewsRecipe):
         )
         self.downloaded_file_paths[url] = downloaded_file_path
 
-        script_path = os.environ("FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH")
+        script_path = os.environ.get("FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH")
         if not script_path:
             self.abort_recipe_processing(
                 "Please set FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH environment variable."
