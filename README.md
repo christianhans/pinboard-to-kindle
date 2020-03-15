@@ -34,8 +34,8 @@ Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
 On macOS with [Homebrew](https://brew.sh) you can run this command to install all prerequisites:
 
 ```
-brew install git
-brew cask install node calibre firefox geckodriver
+brew install git node geckodriver
+brew cask install calibre firefox
 ```
 
 ### Debian and Ubuntu
