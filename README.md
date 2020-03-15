@@ -19,25 +19,29 @@ Prerequisites:
 sudo apt-get install git calibre
 ```
   
-Clone this repository:
+Clone this repository and `cd` into the cloned `pinboard-to-kindle` directory:
 
 ```
 git clone https://github.com/christianhans/pinboard-to-kindle.git
-```
-
-Open `pinboard-to-kindle.recipe` in a text editor of your choice. For example:
-
-```
 cd pinboard-to-kindle
-nano pinboard-to-kindle.recipe
 ```
 
-Adjust `FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH` so that it contains the full file path to `fetch-article-moz-readability/index.js`, for example:
+Set `FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH` so it points to the full file path of `fetch-article-moz-readability/index.js`. For example:
 
 ```
-FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = "/home/pi/pinboard-to-kindle/fetch-article-moz-readability/index.js"
+echo 'FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH="/home/pi/pinboard-to-kindle/fetch-article-moz-readability/index.js"' > config.env
 ```
 
-Save the file and close your text editor.
+Set your Pinboard API token. Copy your token from [this page](https://pinboard.in/settings/password) and replace `username:A3F...HG78` below with your actual token:
+
+```
+echo 'PINBOARD_TOKEN="username:A3F...HG78"' > config.env
+```
 
 ## Usage
+
+In order to generate an eBook optimized for Kindle Paperwhite run:
+
+```
+eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.mobi --output-profile kindle_pw3
+```
