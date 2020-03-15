@@ -4,6 +4,15 @@
 
 Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
 
+## Table of Contents
+
+* [Overview](#overview)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+
 ## Overview
 
   * Leverages a headless Firefox instance and Mozilla's [readability](https://github.com/mozilla/readability) library to fetch clutter- and ad-free article pages.
@@ -14,7 +23,9 @@ Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
   * When a Pinboard bookmark was successfully fetched, the tag `kindle-to` is replaced with the `kindle-sent` tag.
   * The tags `kindle-to`, `kindle-sent` and number of maximum bookmarks to fetch can be configured in `pinboard-to-kindle.recipe`.
 
-## Prerequisites
+## Getting Started
+
+### Prerequisites
 
   * Git
     + Required to clone this repository (alternatively you download this repository as ZIP archive)
@@ -29,7 +40,7 @@ Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
   * Geckodriver
     + Version 0.26.0 or later
 
-### macOS
+#### macOS
 
 On macOS with [Homebrew](https://brew.sh) you can run this command to install all prerequisites:
 
@@ -38,7 +49,7 @@ brew install git node geckodriver
 brew cask install calibre firefox
 ```
 
-### Debian and Ubuntu
+#### Debian and Ubuntu
 
 On Debian and Ubuntu you can run this command to install all prerequisites except Geckodriver:
 
@@ -48,7 +59,7 @@ sudo apt-get install git nodejs npm calibre firefox-esr
 
 Prebuilt Geckodriver binaries for x86 and x64 architectures can be downloaded [here](https://github.com/mozilla/geckodriver/releases). Copy `geckodriver` for example to `/user/local/bin`, such that the `geckodriver` binary is in your `PATH`.
 
-## Installation and Configuration
+### Installation
   
 Clone this repository and `cd` into the cloned `pinboard-to-kindle` directory:
 
@@ -82,3 +93,7 @@ To generate an eBook in ePub format run:
 ```
 eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.epub
 ```
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
