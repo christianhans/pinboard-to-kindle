@@ -50,7 +50,7 @@
 
 On macOS with [Homebrew](https://brew.sh) you can run this command to install all prerequisites:
 
-```
+```sh
 brew install git node geckodriver
 brew cask install calibre firefox
 ```
@@ -59,7 +59,7 @@ brew cask install calibre firefox
 
 On Debian and Ubuntu you can run this command to install all prerequisites except Geckodriver:
 
-```
+```sh
 sudo apt-get install git nodejs npm calibre firefox-esr
 ```
 
@@ -69,20 +69,20 @@ Prebuilt Geckodriver binaries for x86 and x64 architectures can be downloaded [h
   
 Clone this repository and `cd` into the cloned `pinboard-to-kindle` directory:
 
-```
+```sh
 git clone https://github.com/christianhans/pinboard-to-kindle.git
 cd pinboard-to-kindle
 ```
 
 Set `FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH` so it points to the full file path of `fetch-article-moz-readability/index.js`. For example:
 
-```
+```sh
 echo 'FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH="/home/pi/pinboard-to-kindle/fetch-article-moz-readability/index.js"' >> config.env
 ```
 
 Set your Pinboard API token. Copy your token from [this page](https://pinboard.in/settings/password) and replace `username:A3F...HG78` below with your actual token:
 
-```
+```sh
 echo 'PINBOARD_TOKEN="username:A3F...HG78"' >> config.env
 ```
 
@@ -90,13 +90,13 @@ echo 'PINBOARD_TOKEN="username:A3F...HG78"' >> config.env
 
 In order to generate an eBook optimized for Kindle Paperwhite run:
 
-```
+```sh
 eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.mobi --output-profile kindle_pw3
 ```
 
 To generate an eBook in ePub format run:
 
-```
+```sh
 eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.epub
 ```
 
