@@ -52,3 +52,9 @@ In order to generate an eBook optimized for Kindle Paperwhite run:
 ```
 eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.mobi --output-profile kindle_pw3
 ```
+
+To generate an eBook in ePub format run:
+
+```
+eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.epub
+```
