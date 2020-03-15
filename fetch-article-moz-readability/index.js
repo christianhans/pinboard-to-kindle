@@ -1,5 +1,6 @@
 const { writeFile } = require('fs');
 const { Builder } = require('selenium-webdriver');
+const crypto = require("crypto");
 const firefox = require('selenium-webdriver/firefox');
 const readability = require('readability-nodejs');
 const JSDOM = require('jsdom').JSDOM;
@@ -36,7 +37,15 @@ function use_readability(url) {
 }
 
 function countWords(str) {
-	return str.trim().split(/\s+/).length;
+    return str.trim().split(/\s+/).length;
+}
+
+function getHash(url) {
+    return crypto
+        .createHash("sha256")
+        .update(process.env.PINBOARD_MARK_READ_SECRET + url)
+        .digest("hex")
+        .substring(0, 32);
 }
 
 async function fetch_page_source_firefox(url, callback) {
@@ -96,7 +105,7 @@ async function make_readable(url, callback) {
         let links = [];
         links.push('<a id="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
         if (process.env.PINBOARD_MARK_READ_URL && process.env.PINBOARD_MARK_READ_SECRET) {
-            let href = process.env.PINBOARD_MARK_READ_URL + '?s=' + process.env.PINBOARD_MARK_READ_SECRET + '&url=' + url;
+            let href = process.env.PINBOARD_MARK_READ_URL + '?h=' + getHash(url) + '&url=' + url;
             links.push('<a id="pb-to-kindle-article-mark-as-read-link" href="' + href + '">Mark as read</a>');
         }
 
