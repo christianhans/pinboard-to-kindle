@@ -4,27 +4,48 @@
 
 Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
 
+## Overview
+
+  * Leverages a headless Firefox instance and Mozilla's [readability](https://github.com/mozilla/readability) library to fetch clutter- and ad-free article pages. This results in eBooks with articles that look similar to Firefox's Reader View. Pages with dynamic content (e.g. a page that loads images or text via JavaScript) are fetched correctly as well.
+  * Fetches only unread Pinboard bookmarks that have the tag `kindle-to` (per default up to 50 bookmarks).
+  * When a Pinboard bookmark was successfully fetched, the tag `kindle-to` is replaced with the `kindle-sent` tag
+  * The tags `kindle-to`, `kindle-sent` and number of maximum bookmarks to fetch can be configured in `pinboard-to-kindle.recipe`.
+
 ## Prerequisites
 
-  * [Calibre](https://calibre-ebook.com) 3.0 or more recent
-    + Version 4.11.2 is the latest tested version
   * Git
     + Required to clone this repository (alternatively you download this repository as ZIP archive)
+  * Node.js
+    * Version 10 or later
+  * NPM
+    * Version 5 or later
+  * [Calibre](https://calibre-ebook.com)
+    + Version 3.39.1 or later
+  * Firefox
+    + Version 68 or later
+  * Geckodriver
+    + Version 0.26.0 or later
 
-On Debian, Raspian and Ubuntu you can run this command to install all prerequisites:
+### macOS
 
-```
-sudo apt-get install git calibre
-```
-
-On macOS with [Homebrew](https://brew.sh) installed the following commands will also install all prerequisites:
+On macOS with [Homebrew](https://brew.sh) you can run this command to install all prerequisites:
 
 ```
 brew install git
-brew cask install calibre
+brew cask install node calibre firefox geckodriver
 ```
 
-## Installation
+### Debian and Ubuntu
+
+On Debian and Ubuntu you can run this command to install all prerequisites except Geckodriver:
+
+```
+sudo apt-get install git nodejs npm calibre firefox-esr
+```
+
+Prebuilt Geckodriver binaries for x86 and x64 architectures can be downloaded [here](https://github.com/mozilla/geckodriver/releases). Copy `geckodriver` for example to `/user/local/bin`, such that the `geckodriver` binary is in your `PATH`.
+
+## Installation and Configuration
   
 Clone this repository and `cd` into the cloned `pinboard-to-kindle` directory:
 
