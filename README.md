@@ -48,7 +48,7 @@
 
 #### macOS
 
-On macOS with [Homebrew](https://brew.sh) you can run this command to install all prerequisites:
+On macOS you can use [Homebrew](https://brew.sh) to install all prerequisites:
 
 ```sh
 brew install git node geckodriver
