@@ -2,7 +2,7 @@
 
 ![Raspberry Pi and Kindle](https://i.imgur.com/4ZxMhrt.jpg)
 
-Send a daily newspaper containing unread Pinboard bookmarks to your Kindle
+Pinboard recipe for sending unread Pinboard bookmarks to your Kindle.
 
 ## Prerequisites
 
