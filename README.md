@@ -11,7 +11,7 @@ Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
     + Pages with dynamic content (e.g. a page that loads images or text via JavaScript) can be fetched correctly.
     + Most images embedded in articles are fetched as well and will be part of the generated eBook.
   * Fetches only unread Pinboard bookmarks that have the tag `kindle-to` (per default up to 50 bookmarks).
-  * When a Pinboard bookmark was successfully fetched, the tag `kindle-to` is replaced with the `kindle-sent` tag
+  * When a Pinboard bookmark was successfully fetched, the tag `kindle-to` is replaced with the `kindle-sent` tag.
   * The tags `kindle-to`, `kindle-sent` and number of maximum bookmarks to fetch can be configured in `pinboard-to-kindle.recipe`.
 
 ## Prerequisites
@@ -22,7 +22,7 @@ Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
     * Version 10 or later
   * NPM
     * Version 5 or later
-  * [Calibre](https://calibre-ebook.com)
+  * Calibre
     + Version 3.39.1 or later
   * Firefox
     + Version 68 or later
