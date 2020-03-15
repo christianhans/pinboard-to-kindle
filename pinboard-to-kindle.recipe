@@ -21,9 +21,6 @@ KINDLE_TO_TAG = "kindle-to"
 ## replace KINDLE_TO_TAG with this tag
 KINDLE_SENT_TAG = "kindle-sent"
 
-## Full file path to pinboard-to-kindle/fetch-article-moz-readability/index.js
-FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH = ""
-
 ## Temporary folder to use for downloading bookmark's page content
 FETCH_ARTICLE_TMP_PATH = "/tmp"
 
@@ -106,11 +103,17 @@ class PinboardRecipe(BasicNewsRecipe):
         )
         self.downloaded_file_paths[url] = downloaded_file_path
 
+        script_path = os.environ("FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH")
+        if not script_path:
+            self.abort_recipe_processing(
+                "Please set FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH environment variable."
+            )
+
         print("Downloading: {}".format(url))
         subprocess.call(
             [
                 NODE_BIN,
-                FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH,
+                script_path,
                 url,
                 "--output_file={}".format(downloaded_file_path),
             ]
