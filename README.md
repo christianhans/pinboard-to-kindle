@@ -11,13 +11,20 @@ Send a daily newspaper containing unread Pinboard bookmarks to your Kindle
   * Git
     + Required to clone this repository (alternatively you download this repository as ZIP archive)
 
-## Installation on Debian/Raspian 10.x
-
-Prerequisites:
+On Debian, Raspian and Ubuntu you can run this command to install all prerequisites:
 
 ```
 sudo apt-get install git calibre
 ```
+
+On macOS with [Homebrew](https://brew.sh) installed the following commands will also install all prerequisites:
+
+```
+brew install git
+brew cask install calibre
+```
+
+## Installation
   
 Clone this repository and `cd` into the cloned `pinboard-to-kindle` directory:
 
