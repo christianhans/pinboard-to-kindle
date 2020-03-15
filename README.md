@@ -2,7 +2,7 @@
 
 ![Raspberry Pi and Kindle](https://i.imgur.com/4ZxMhrt.jpg)
 
-Pinboard recipe for sending unread Pinboard bookmarks to your Kindle.
+Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
 
 ## Prerequisites
 
