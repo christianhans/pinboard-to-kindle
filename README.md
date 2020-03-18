@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/christianhans/pinboard-to-kindle">
-    <img src="https://i.imgur.com/4ZxMhrt.jpg" alt="Raspberry Pi and Kindle" width="300">
+    <img src="https://i.imgur.com/OZFtU8L.jpg" alt="Raspberry Pi and Kindle" width="300">
   </a>
 
   <h3 align="center">Pinboard to Kindle</h3>
