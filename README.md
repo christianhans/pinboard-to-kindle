@@ -33,20 +33,16 @@
 
 ### Prerequisites
 
-  * Git
-    + Required to clone this repository (alternatively you download this repository as ZIP archive)
-  * Node.js
-    * Version 10 or later
-  * NPM
-    * Version 5 or later
-  * Calibre
-    + Version 3.39.1 or later
-  * Firefox
-    + Version 68 or later
-  * Geckodriver
-    + Version 0.26.0 or later
+| Prerequisite | Version             | Comment                              |
+|--------------|---------------------|--------------------------------------|
+| Git          | Any                 | Required for cloning this repository |
+| Node.js      | Version 10 or later |                                      |
+| NPM          | Version 5 or later  |                                      |
+| Calibre      | 3.39.1 or later     |                                      |
+| Firefox      | 68 or later         |                                      |
+| Geckodriver  | 0.26.0 or later     |                                      |
 
-#### macOS
+#### Install Prerequisites on macOS
 
 On macOS you can use [Homebrew](https://brew.sh) to install all prerequisites:
 
@@ -55,7 +51,7 @@ brew install git node geckodriver
 brew cask install calibre firefox
 ```
 
-#### Debian and Ubuntu
+#### Install Prerequisites on Debian/Ubuntu
 
 On Debian and Ubuntu you can run this command to install all prerequisites except Geckodriver:
 
