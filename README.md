@@ -33,14 +33,14 @@
 
 ### Prerequisites
 
-| Prerequisite | Version             | Comment                              |
-|--------------|---------------------|--------------------------------------|
-| Git          | Any                 | Required for cloning this repository |
-| Node.js      | Version 10 or later |                                      |
-| NPM          | Version 5 or later  |                                      |
-| Calibre      | 3.39.1 or later     |                                      |
-| Firefox      | 68 or later         |                                      |
-| Geckodriver  | 0.26.0 or later     |                                      |
+| Prerequisite | Version         | Comment                              |
+|--------------|-----------------|--------------------------------------|
+| Git          | Any             | Required for cloning this repository |
+| Node.js      | 10 or later     |                                      |
+| NPM          | 5 or later      |                                      |
+| Calibre      | 3.39.1 or later |                                      |
+| Firefox      | 68 or later     |                                      |
+| Geckodriver  | 0.26.0 or later |                                      |
 
 #### Install Prerequisites on macOS
 
