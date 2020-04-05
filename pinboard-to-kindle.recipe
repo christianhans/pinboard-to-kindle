@@ -121,7 +121,7 @@ class PinboardRecipe(BasicNewsRecipe):
         return downloaded_file_path
 
     def _get_fetch_article_moz_readability_script_path(self):
-        if len(sys.argv) < 3 or sys.argv[0] != "ebook-convert":
+        if len(sys.argv) < 3 or not "ebook-convert" in sys.argv[0]:
             self.abort_recipe_processing(
                 "Please invoke this Calibre recipe via: "
                 "ebook-convert /path/to/pinboard-to-kindle.recipe output_file [options]"
