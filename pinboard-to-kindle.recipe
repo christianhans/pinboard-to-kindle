@@ -21,6 +21,9 @@ KINDLE_TO_TAG = "kindle-to"
 ## replace KINDLE_TO_TAG with this tag
 KINDLE_SENT_TAG = "kindle-sent"
 
+## Relative file path to fetch-article-moz-readability/index.js
+FETCH_ARTICLE_MOZ_READABILITY_RELATIVE_PATH = "fetch-article-moz-readability/index.js"
+
 ## Temporary folder to use for downloading bookmark's page content
 FETCH_ARTICLE_TMP_PATH = "/tmp"
 
@@ -28,6 +31,7 @@ FETCH_ARTICLE_TMP_PATH = "/tmp"
 NODE_BIN = "node"
 
 import os
+import sys
 import re
 import urllib
 import json
@@ -103,23 +107,31 @@ class PinboardRecipe(BasicNewsRecipe):
         )
         self.downloaded_file_paths[url] = downloaded_file_path
 
-        script_path = os.environ.get("FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH")
-        if not script_path:
-            self.abort_recipe_processing(
-                "Please set FETCH_ARTICLE_MOZ_READABILITY_SCRIPT_PATH environment variable."
-            )
-
         print("Downloading: {}".format(url))
+
         subprocess.call(
             [
                 NODE_BIN,
-                script_path,
+                self._get_fetch_article_moz_readability_script_path(),
                 url,
                 "--output_file={}".format(downloaded_file_path),
             ]
         )
 
         return downloaded_file_path
+
+    def _get_fetch_article_moz_readability_script_path(self):
+        if len(sys.argv) < 3 or sys.argv[0] != "ebook-convert":
+            self.abort_recipe_processing(
+                "Please invoke this Calibre recipe via: "
+                "ebook-convert /path/to/pinboard-to-kindle.recipe output_file [options]"
+            )
+        if not "PWD" in os.environ:
+            self.abort_recipe_processing("PWD environment variable not set.")
+        recipe_base_path = os.path.normpath(
+            os.path.join(os.environ["PWD"], os.path.dirname(sys.argv[1]))
+        )
+        return os.path.join(recipe_base_path, FETCH_ARTICLE_MOZ_READABILITY_RELATIVE_PATH)
 
     def _get_article_metadata(self, article_file_path):
         res = {}
@@ -175,4 +187,3 @@ class PinboardRecipe(BasicNewsRecipe):
                 continue
             print("Removing temporary file: {}".format(file_path))
             os.remove(file_path)
-
