@@ -1,12 +1,16 @@
 <p align="center">
   <a href="https://github.com/christianhans/pinboard-to-kindle">
-    <img src="https://imgur.com/rWkJ1Bt.jpg" alt="Raspberry Pi and Kindle" width="300">
+    <img src="https://imgur.com/rWkJ1Bt.jpg" alt="Raspberry Pi and Kindle" width="400">
   </a>
 
   <h3 align="center">Pinboard to Kindle</h3>
 
   <p align="center">
     Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
+  </p>
+  
+  <p align="center">
+  ➡️ <a href="https://christianhans.info/12791/running-your-own-read-later-service-with-raspberry-pi-and-pinboard">Build your personal Read Later Service using Raspberry Pi!</a>
   </p>
 </p>
 
