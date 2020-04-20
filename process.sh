@@ -22,6 +22,6 @@ then
 fi
 
 ebook-convert "${RECIPE_PATH}" "${FETCHED_DIR_PATH}/${TITLE}-${DATE}.mobi" \
-	--title "${TITLE}" --output-profile kindle_pw3 && \
+	--title "${TITLE} ${DATE}" --output-profile kindle_pw3 && \
 	echo "" | mail -a"From:$MAIL_FROM" -s "[Send] ${TITLE_DATE}: ${RECIPE}" \
 		-A "${FETCHED_DIR_PATH}/${TITLE}-${DATE}.mobi" "${MAIL_TO}"
