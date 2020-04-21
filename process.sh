@@ -12,7 +12,7 @@ fi
 # MAIL_TO = ""
 
 RECIPE_PATH="$1"
-TITLE="$2"
+TITLE="${@:2}"
 DATE=`date +%Y-%m-%d`
 
 FETCHED_DIR_PATH="${HOME}/calibre-fetched"
