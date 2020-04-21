@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "${1}" ] || [ "${1}" == "-h|--help" ]
+if [ -z "${1}" ] || [ -z "${2}" ] || [ "${1}" == "-h|--help" ]
 then
   echo "Usage:"
   echo "  process.sh /path/to/calibre.recipe Title"
