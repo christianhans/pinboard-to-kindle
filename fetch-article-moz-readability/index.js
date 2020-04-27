@@ -2,7 +2,7 @@ const { writeFile } = require('fs');
 const { Builder } = require('selenium-webdriver');
 const crypto = require("crypto");
 const firefox = require('selenium-webdriver/firefox');
-const readability = require('readability-nodejs');
+const Readability = require("readability");
 const JSDOM = require('jsdom').JSDOM;
 const URL = require('url').URL;
 const argv = require('minimist')(process.argv.slice(2));
@@ -81,7 +81,7 @@ async function make_readable(url, callback) {
 
         // Parse article
         const dom = new JSDOM(page_source);
-        let reader = new readability.Readability(dom.window.document);
+        let reader = new Readability(dom.window.document);
         let article = reader.parse();
         let articleHtml = page_source;
         if (use_readability(url)) {
