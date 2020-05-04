@@ -105,7 +105,12 @@ async function make_readable(url, callback) {
         let links = [];
         links.push('<a id="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
         if (process.env.PINBOARD_MARK_READ_URL && process.env.PINBOARD_MARK_READ_SECRET) {
-            let href = process.env.PINBOARD_MARK_READ_URL + '?h=' + getHash(url) + '&url=' + url;
+            let href =
+              process.env.PINBOARD_MARK_READ_URL +
+              "?h=" +
+              getHash(url) +
+              "&url=" +
+              encodeURIComponent(url);
             links.push('<a id="pb-to-kindle-article-mark-as-read-link" href="' + href + '">Mark as read</a>');
         }
 
