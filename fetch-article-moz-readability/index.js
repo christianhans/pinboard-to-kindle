@@ -8,12 +8,12 @@ const URL = require('url').URL;
 const argv = require('minimist')(process.argv.slice(2));
 
 // Don't use Firefox for these domains. Will use JSDOM to fetch page source instead.
-const FIREFOX_DOMAIN_BLACKLIST = [
+const FIREFOX_DOMAIN_DENYLIST = [
     'spiegel.de'
 ]
 
 // Don't use Readability for these domains. Will use full page HTML instead.
-const READABILITY_DOMAIN_BLACKLIST = [
+const READABILITY_DOMAIN_DENYLIST = [
     'newyorker.com'
 ]
 
@@ -29,11 +29,11 @@ function url_in_blacklist(url, blacklist) {
 }
 
 function use_firefox(url) {
-    return !url_in_blacklist(url, FIREFOX_DOMAIN_BLACKLIST);
+    return !url_in_blacklist(url, FIREFOX_DOMAIN_DENYLIST);
 }
 
 function use_readability(url) {
-    return !url_in_blacklist(url, READABILITY_DOMAIN_BLACKLIST);
+    return !url_in_blacklist(url, READABILITY_DOMAIN_DENYLIST);
 }
 
 function countWords(str) {
