@@ -10,7 +10,7 @@
   </p>
   
   <p align="center">
-  ➡️ <a href="https://christianhans.info/12791/running-your-own-read-later-service-with-raspberry-pi-and-pinboard">Build your personal Read Later Service using Raspberry Pi!</a>
+  ➡️ <a href="https://christianhans.info/12791/running-your-own-read-later-service-with-raspberry-pi-and-pinboard">Build your personal Read Later Service using Raspberry Pi</a>
   </p>
 </p>
 
