@@ -6,7 +6,7 @@
   <h3 align="center">Pinboard to Kindle</h3>
 
   <p align="center">
-    Calibre recipe for sending unread Pinboard bookmarks to your Kindle.
+  Calibre recipe for sending unread <a href="https://pinboard.in">Pinboard</a> bookmarks to your Kindle.
   </p>
   
   <p align="center">
