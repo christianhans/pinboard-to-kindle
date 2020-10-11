@@ -61,15 +61,17 @@ class PinboardRecipe(BasicNewsRecipe):
         return pinboard_token
 
     def _get_bookmarks(self):
-        params = urllib.urlencode(
+        params = urllib.parse.urlencode(
             {
                 "tag": KINDLE_TO_TAG if KINDLE_TO_TAG else "",
                 "format": "json",
                 "auth_token": self._get_pinboard_token(),
             }
         )
-        response = urllib.urlopen("https://api.pinboard.in/v1/posts/all?" + params)
-        bookmarks = json.loads(response.read().decode('utf-8-sig'))
+        response = urllib.request.urlopen(
+            "https://api.pinboard.in/v1/posts/all?" + params
+        )
+        bookmarks = json.loads(response.read().decode("utf-8-sig"))
         bookmarks = [b for b in bookmarks if (b["toread"] == "yes")]
         bookmarks = bookmarks[:MAX_ARTICLES]
         if len(bookmarks) == 0:
@@ -85,7 +87,7 @@ class PinboardRecipe(BasicNewsRecipe):
             tags.remove(KINDLE_TO_TAG)
         if not KINDLE_SENT_TAG in tags:
             tags.append(KINDLE_SENT_TAG)
-        params = urllib.urlencode(
+        params = urllib.parse.urlencode(
             {
                 "url": bookmark["href"],
                 "description": bookmark["description"],
@@ -99,7 +101,7 @@ class PinboardRecipe(BasicNewsRecipe):
                 "auth_token": self._get_pinboard_token(),
             }
         )
-        urllib.urlopen("https://api.pinboard.in/v1/posts/add?" + params)
+        urllib.request.urlopen("https://api.pinboard.in/v1/posts/add?" + params)
 
     def _fetch_article_moz_readability(self, url):
         downloaded_file_path = os.path.join(
@@ -131,7 +133,9 @@ class PinboardRecipe(BasicNewsRecipe):
         recipe_base_path = os.path.normpath(
             os.path.join(os.environ["PWD"], os.path.dirname(sys.argv[1]))
         )
-        return os.path.join(recipe_base_path, FETCH_ARTICLE_MOZ_READABILITY_RELATIVE_PATH)
+        return os.path.join(
+            recipe_base_path, FETCH_ARTICLE_MOZ_READABILITY_RELATIVE_PATH
+        )
 
     def _get_article_metadata(self, article_file_path):
         res = {}
