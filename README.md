@@ -37,14 +37,14 @@
 
 ### Prerequisites
 
-| Prerequisite | Version         | Comment                              |
-|--------------|-----------------|--------------------------------------|
-| Git          | Any             | Required for cloning this repository |
-| Node.js      | 10 or later     |                                      |
-| NPM          | 5 or later      |                                      |
-| Calibre      | 5.2.0 or later |                                      |
-| Firefox      | 68 or later     |                                      |
-| Geckodriver  | 0.26.0 or later |                                      |
+| Prerequisite | Version         | Comment                                                                                                 |
+|--------------|-----------------|---------------------------------------------------------------------------------------------------------|
+| Git          | Any             | Required for cloning this repository.                                                                   |
+| Node.js      | 10 or later     |                                                                                                         |
+| NPM          | 5 or later      |                                                                                                         |
+| Calibre      | >= 3.39, < 5.0  | Calibre 5.0 and later come with Python 3 which is not supported by the pinboard-to-kindle recipe yet. We are keeping Python 2 compatibility (i.e. all Calibre versions prior to 5.0) until the Raspberry Pie OS stable channel ships with Calibre 5.0 or later.          |
+| Firefox      | 68 or later     |                                                                                                         |
+| Geckodriver  | 0.26.0 or later |                                                                                                         |
 
 #### Install Prerequisites on macOS
 
