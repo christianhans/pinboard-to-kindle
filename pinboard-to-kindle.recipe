@@ -2,7 +2,7 @@
 
 # To test this recipe run:
 # echo "PINBOARD_TOKEN=..." > config.env
-# eval $(egrep -v '^#' config.env | xargs) ebook-convert pinboard-to-kindle.recipe test.mobi --output-profile kindle_pw3 --verbose
+# eval $(egrep -v "^#" config.env | xargs) ebook-convert pinboard-to-kindle.recipe pinboard.epub
 
 __license__ = "MIT"
 __copyright__ = "2020, Christian Hans"
