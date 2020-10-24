@@ -12,7 +12,7 @@ __website__ = "https://github.com/christianhans/pinboard-to-kindle"
 # Config
 #
 ## Maximum number of unread Pinboard bookmarks to fetch
-MAX_ARTICLES = 50
+MAX_ARTICLES = 25
 
 ## If set, the recipe will only consider unread Pinboard bookmarks that have this tag
 KINDLE_TO_TAG = "kindle-to"
