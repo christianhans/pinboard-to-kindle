@@ -138,12 +138,12 @@ class PinboardRecipe(BasicNewsRecipe):
         with open(article_file_path, "r") as f:
             html = f.read()
         match = re.search(
-            '<[^>]+ id="pb-to-kindle-article-title">(.*?)</[^>]+>', html, re.IGNORECASE
+            '<[^>]+ class="pb-to-kindle-article-title">(.*?)</[^>]+>', html, re.IGNORECASE
         )
         if match:
             res["title"] = match.group(1)
         match = re.search(
-            '<[^>]+ id="pb-to-kindle-article-metadata">(.*?)</[^>]+>',
+            '<[^>]+ class="pb-to-kindle-article-metadata">(.*?)</[^>]+>',
             html,
             re.IGNORECASE,
         )
