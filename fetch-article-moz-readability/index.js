@@ -103,7 +103,7 @@ async function make_readable(url, callback) {
         
         // Article links
         let links = [];
-        links.push('<a id="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
+        links.push('<a class="pb-to-kindle-article-link" href="' + url + '">Article link</a>');
         if (process.env.PINBOARD_MARK_READ_URL && process.env.PINBOARD_MARK_READ_SECRET) {
             let href =
               process.env.PINBOARD_MARK_READ_URL +
@@ -111,15 +111,15 @@ async function make_readable(url, callback) {
               getHash(url) +
               "&url=" +
               encodeURIComponent(url);
-            links.push('<a id="pb-to-kindle-article-mark-as-read-link" href="' + href + '">Mark as read</a>');
+            links.push('<a class="pb-to-kindle-article-mark-as-read-link" href="' + href + '">Mark as read</a>');
         }
 
         // Output
         if (article.title) {
-            res.push('<h2 id="pb-to-kindle-article-title">' + article.title + '</h2>');
+            res.push('<h2 class="pb-to-kindle-article-title">' + article.title + '</h2>');
         }
-        res.push('<p><i id="pb-to-kindle-article-metadata">' + meta.join(' • ') + '</i></p>');
-        res.push('<p><i id="pb-to-kindle-article-links">' + links.join(' • ') + '</i></p>');
+        res.push('<p><i class="pb-to-kindle-article-metadata">' + meta.join(' • ') + '</i></p>');
+        res.push('<p><i class="pb-to-kindle-article-links">' + links.join(' • ') + '</i></p>');
         res.push('<hr>');
         res.push(articleHtml);
         res.push('<hr>');
