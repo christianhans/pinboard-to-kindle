@@ -1,5 +1,5 @@
 const { writeFile } = require('fs');
-const { Builder } = require('selenium-webdriver');
+const { Builder, Capabilities } = require('selenium-webdriver');
 const crypto = require("crypto");
 const firefox = require('selenium-webdriver/firefox');
 const { Readability } = require("@mozilla/readability");
@@ -49,11 +49,10 @@ function getHash(url) {
 }
 
 async function fetch_page_source_firefox(url, callback) {
-    var options = new firefox.Options();
-    options.addArguments("-headless");
     const driver = await new Builder()
         .forBrowser('firefox')
-        .setFirefoxOptions(options)
+        .withCapabilities(Capabilities.firefox().set("acceptInsecureCerts", true))
+        .setFirefoxOptions(new firefox.Options().addArguments("-headless"))
         .build();
     try {
         await driver.get(url);
