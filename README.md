@@ -42,7 +42,7 @@
 | Git          | Any             | Required for cloning this repository.                                                                   |
 | Node.js      | 10 or later     |                                                                                                         |
 | NPM          | 5 or later      |                                                                                                         |
-| Calibre      | >= 3.39, < 5.0  | Calibre 5.0 and later come with Python 3 which is not supported<br/> by the pinboard-to-kindle recipe yet. We are keeping Python 2 <br/>compatibility (i.e. all Calibre versions prior to 5.0) until the <br/>Raspberry Pie OS stable channel ships with Calibre 5.0 or later. |
+| Calibre      | >= 5.0          |                                                                                                         |
 | Firefox      | 68 or later     |                                                                                                         |
 | Geckodriver  | 0.26.0 or later |                                                                                                         |
 
