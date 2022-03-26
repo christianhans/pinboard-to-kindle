@@ -12,7 +12,7 @@
   "dependencies": {
     "@mozilla/readability": "^0.4.2",
     "jsdom": "^19.0.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "request-promise-native": "latest",
     "selenium-webdriver": "^4.1.1"
   }
