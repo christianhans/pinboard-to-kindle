@@ -21,8 +21,9 @@ then
   mkdir ${FETCHED_DIR_PATH}
 fi
 
-ebook-convert "${RECIPE_PATH}" "${FETCHED_DIR_PATH}/${TITLE}-${DATE}.mobi" \
-  --dont-compress --change-justification left \
-  --title "${TITLE} ${DATE}" --output-profile kindle_oasis && \
+ebook-convert "${RECIPE_PATH}" "${FETCHED_DIR_PATH}/${TITLE}-${DATE}.epub" \
+  --change-justification left \
+  --title "${TITLE} ${DATE}" \
+  --output-profile kindle_oasis && \
   echo "" | mail -a"From:$MAIL_FROM" -s "[pinboard-to-kindle] ${TITLE} ${DATE}" \
-    -A "${FETCHED_DIR_PATH}/${TITLE}-${DATE}.mobi" "${MAIL_TO}"
+    -A "${FETCHED_DIR_PATH}/${TITLE}-${DATE}.epub" "${MAIL_TO}"
