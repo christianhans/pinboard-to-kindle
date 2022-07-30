@@ -22,7 +22,7 @@ then
   mkdir ${FETCHED_DIR_PATH}
 fi
 
-TMPDIR=${HOME}/tmp ebook-convert "${RECIPE_PATH}" "${FETCHED_DIR_PATH}/${TITLE}-${DATE_SHORT}.epub" \
+ebook-convert "${RECIPE_PATH}" "${FETCHED_DIR_PATH}/${TITLE}-${DATE_SHORT}.epub" \
   --title "${TITLE} [${DATE_LONG}]" \
   --output-profile kindle_oasis && \
   echo "" | mail -a"From:$MAIL_FROM" -s "[pinboard-to-kindle] ${TITLE} ${DATE_SHORT}" \
