@@ -33,7 +33,6 @@ NODE_BIN = "node"
 import os
 import sys
 import re
-import urllib
 import json
 import subprocess
 import uuid
@@ -73,7 +72,6 @@ class PinboardRecipe(BasicNewsRecipe):
         response = urlopen("https://api.pinboard.in/v1/posts/all?" + params)
         bookmarks = json.loads(response.read().decode('utf-8-sig'))
         bookmarks = [b for b in bookmarks if (b["toread"] == "yes")]
-        bookmarks = bookmarks[:MAX_ARTICLES]
         if len(bookmarks) == 0:
             self.abort_recipe_processing("No unread Pinboard bookmarks.")
         return bookmarks
@@ -114,6 +112,7 @@ class PinboardRecipe(BasicNewsRecipe):
         subprocess.call(
             [
                 NODE_BIN,
+                "--unhandled-rejections=strict",
                 self._get_fetch_article_moz_readability_script_path(),
                 url,
                 "--output_file={}".format(downloaded_file_path),
@@ -162,6 +161,9 @@ class PinboardRecipe(BasicNewsRecipe):
 
         bookmarks = self._get_bookmarks()
         for bookmark in bookmarks:
+            if len(articles) >= MAX_ARTICLES:
+                break
+
             url = bookmark["href"]
             try:
                 article_file_path = self._fetch_article_moz_readability(url)
@@ -177,9 +179,11 @@ class PinboardRecipe(BasicNewsRecipe):
                     "title": article_info.get("title", ""),
                     "url": url,
                     "description": article_info.get("metadata", ""),
-                    # "date": "February 20th, 2020",
                 }
             )
+
+        if len(articles) == 0:
+            self.abort_recipe_processing("No articles were fetched.")
 
         return [("Pinboard", articles)]
 
